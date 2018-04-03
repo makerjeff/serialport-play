@@ -9,6 +9,8 @@
   "author": "Jefferson Wu <makerjeffwu@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^2.3.2",
+    "nvm": "0.0.4",
     "serialport": "^6.1.1"
   }
 }
