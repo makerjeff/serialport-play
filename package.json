@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "chalk": "^2.3.2",
+    "clear": "^0.1.0",
     "nvm": "0.0.4",
     "serialport": "^6.1.1"
   }
