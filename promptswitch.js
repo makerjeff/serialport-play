@@ -1,3 +1,5 @@
+// TODO: play with prompts here.
+
 const readline = require('readline');
 
 const rl = readline.createInterface({
@@ -34,7 +36,7 @@ rl.on('line', (line) => {
 });
 
 
-// --- halper finctions ---
+// --- helper functions ---
 
 function switch_mode(mode) {
 

@@ -9,3 +9,4 @@ Starting again and playing with Node => Arduino communication.
 ###APIs / Libraries Used
 - [readline](https://nodejs.org/api/readline.html): Line by line input, like Python's input()
 - [SerialPort](https://www.npmjs.com/package/serialport): (Newer than the one in the NYU ITP Node Serialport Tutorial, different API.)
+- [Basic Commandline Interactive Loop](https://jttan.com/2016/06/node-js-basic-command-line-interactive-loop/): Solves the twitching UI issue when trying to do an interactive loop like in Python.
