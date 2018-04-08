@@ -11,12 +11,8 @@ const rl = readline.createInterface({
     prompt: 'servo angle > '
 });
 
-const sp = new SerialPort(device, {baudRate: 9600}, function(err) {
-    if(err) {
-        console.log(`Error occurred: ${chalk.red(err)}`);
-        process.exit(1);
-    }
-});
+const sp = new SerialPort(device, {baudRate: 9600}, onError);
+
 
 // device path check
 if (!device) {
@@ -36,26 +32,30 @@ rl.on('line', (line) => {
             break;
         default:
             console.log('Servo angle set: ' + line);
+            sp.write(line + ';', onError);
             break;
     }
     rl.prompt();
 });
-
 rl.on('close', () => {
     program_exit();
 });
 
-// --- initialize ---
-function init() {
 
-}
+// --- serial port events ---
+sp.on('data', (data) => {
+    console.log('incoming serial data: ' + data);
+});
 
-function evaluate() {
 
-}
 
 // --- helper functions ---
 function program_exit() {
     console.log(chalk.yellow('Goodbye!'));
     process.exit(0);
+}
+
+function onError(err) {
+    console.log(`Error occurred: ${chalk.red(err)}`);
+    process.exit(1);
 }
