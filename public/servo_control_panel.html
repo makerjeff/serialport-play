@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Servo Control Panels</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 50px;
+
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 25px;
+            height: 50px;
+
+            background: #4caf50;
+            cursor: pointer;
+        }
+
+        .veil {
+            position: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            width: 100vw;
+            height: 100vh;
+
+            background: #4caf50;
+
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+<div id="veil" class="veil">
+    <p>loading...</p>
+</div>
+
+<h3>Servo</h3>
+<input id="slider" type="range" min="0" max="180" value="90" class="slider" id="myRange">
+<div id="value_div">00</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+
+    var veil = document.getElementById('veil');
+    var slider = document.getElementById('slider');
+    var value_div = document.getElementById('value_div');
+
+    // --- servo ---;
+    var then = Date.now();
+    var interval = 10000;
+
+    // --- SOCKETS ---
+    var socket = io.connect();
+    var room = 'abc123';
+
+    socket.on('connect', function() {
+        socket.emit('room', room);
+    });
+
+    socket.on('message', function(data) {
+        console.log('Incoming message from server: ' + data);
+        remove_veil();
+    });
+
+    // --- HTML events ---
+
+    window.addEventListener('load', function(e) {
+        update_value_div(90);
+        timed_pinger();
+
+    });
+
+    slider.addEventListener('change', function(e) {
+        console.log('value has changed to ' + slider.value);
+        update_value_div(slider.value);
+        update_servo_position(slider.value);
+    });
+
+
+    // --- FUNCTIONS ---
+    function update_value_div(val) {
+        value_div.innerHTML = val;
+    }
+
+    // TODO: create interval controlled servo send.
+    function update_servo_position(val) {
+        socket.emit('servo1', val);
+    }
+
+    function remove_veil() {
+        veil.style.display = 'none';
+    }
+
+
+    function timed_pinger() {
+
+        var now = Date.now();
+
+        if(then - now >= interval) {
+            console.log('ping! value ' + (then - now));
+            then = now;
+            requestAnimationFrame(timed_pinger);
+        }
+
+    }
+
+
+</script>
+</body>
+</html>
