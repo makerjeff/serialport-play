@@ -41,11 +41,26 @@ io.on('connection', (socket) => {
 });
 
 // Serial Port
+const api_router = express.Router();
+
 
 // ROUTES
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/servo_control_panel.html');
 });
+
+// --- API routes ---
+api_router.get('/', (req,res) => {
+    res.send('API route working!');
+});
+
+api_router.get('/serialports', (req,res) => {
+    SerialPort.list().then((ports) => {
+        res.json(ports);
+    });
+});
+
+app.use('/api', api_router);
 
 // --- static files ---
 app.use(express.static('public/'));
